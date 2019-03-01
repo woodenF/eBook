@@ -8,6 +8,7 @@
 import { ebookMixin } from '../../utils/mixin'
 import Epub from 'epubjs'
 import { Promise } from 'q'
+import { getFontFamily, saveFontFamily, getFontSize, saveFontSize } from '../../utils/localStorage'
 global.ePub = Epub
 
 export default {
@@ -37,6 +38,24 @@ export default {
       this.setSettingVisible(-1)
       this.setFontFamilyVisible(false)
     },
+    initFontSize() {
+      let fontSize = getFontSize(this.fileName)
+      if (!fontSize) {
+        saveFontSize(this.fileName, this.defaultFontSize)
+      } else {
+        this.rendition.themes.fontSize(fontSize)
+        this.setDefaultFontSize(fontSize)
+      }
+    },
+    initFontFamily() {
+      let font = getFontFamily(this.fileName)
+      if (!font) {
+        saveFontFamily(this.fileName, this.defaultFontFamily)
+      } else {
+        this.rendition.themes.font(font)
+        this.setDefaultFontFamily(font)
+      }
+    },
     initEpub() {
       const url = `http://172.17.0.43:9000/epub/${this.fileName}.epub`
       this.book = new Epub(url)
@@ -47,7 +66,10 @@ export default {
         // 微信兼容性配置
         method: 'default'
       })
-      this.rendition.display()
+      this.rendition.display().then(() => {
+        this.initFontSize()
+        this.initFontFamily()
+      })
       this.rendition.on('touchstart', event => {
         this.touchStartX = event.changedTouches[0].clientX
         this.touchStartTime = event.timeStamp
@@ -72,7 +94,6 @@ export default {
           contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/montserrat.css`),
           contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`)
         ]).then(() => {
-          this.currentBook.rendition.themes.font('Cabin')
           console.log('字体全部加载完毕！')
         })
       })
