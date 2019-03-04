@@ -8,7 +8,7 @@
 import { ebookMixin } from '../../utils/mixin'
 import Epub from 'epubjs'
 import { Promise } from 'q'
-import { getFontFamily, saveFontFamily, getFontSize, saveFontSize } from '../../utils/localStorage'
+import { getFontFamily, saveFontFamily, getFontSize, saveFontSize, saveTheme, getTheme } from '../../utils/localStorage'
 global.ePub = Epub
 
 export default {
@@ -56,6 +56,19 @@ export default {
         this.setDefaultFontFamily(font)
       }
     },
+    initTheme() {
+      let defaultTheme = getTheme(this.fileName)
+      if (!defaultTheme) {
+        defaultTheme = this.themeList[0].name
+        this.setDefaultTheme(defaultTheme)
+        saveTheme(this.fileName, defaultTheme)
+      }
+      this.themeList.forEach(theme => {
+        this.rendition.themes.register(theme.name, theme.style)
+      })
+      console.log(this.defaultTheme)
+      this.rendition.themes.select(defaultTheme)
+    },
     initEpub() {
       const url = `http://172.17.0.43:9000/epub/${this.fileName}.epub`
       this.book = new Epub(url)
@@ -67,6 +80,7 @@ export default {
         method: 'default'
       })
       this.rendition.display().then(() => {
+        this.initTheme()
         this.initFontSize()
         this.initFontFamily()
       })

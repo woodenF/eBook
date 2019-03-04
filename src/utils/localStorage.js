@@ -36,6 +36,14 @@ export function getBookObject(fileName, key) {
   }
 }
 
+export function getLocal() {
+  return getLocalStorage('locale')
+}
+
+export function saveLocale(locale) {
+  return setLocalStorage('locale', locale)
+}
+
 export function getFontFamily(fileName) {
   return getBookObject(fileName, 'fontFamily')
 }
@@ -52,10 +60,10 @@ export function saveFontSize(fileName, fontSize) {
   return setBookObject(fileName, 'fontSize', fontSize)
 }
 
-export function getLocal() {
-  return getLocalStorage('locale')
+export function getTheme(fileName) {
+  return getBookObject(fileName, 'theme')
 }
 
-export function saveLocale(locale) {
-  return setLocalStorage('locale', locale)
+export function saveTheme(fileName, theme) {
+  return setBookObject(fileName, 'theme', theme)
 }
