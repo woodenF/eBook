@@ -1,5 +1,5 @@
 import { mapGetters, mapActions } from 'vuex'
-import { themeList } from './book'
+import { themeList, addCss, removeAllCss } from './book'
 export const ebookMixin = {
   computed: {
     ...mapGetters([
@@ -26,6 +26,11 @@ export const ebookMixin = {
       'setDefaultFontFamily',
       'setFontFamilyVisible',
       'setDefaultTheme'
-    ])
+    ]),
+    initGlobalStyle() {
+      removeAllCss()
+      const url = `${process.env.VUE_APP_RES_URL}/theme/theme_${this.defaultTheme.toLowerCase()}.css`
+      addCss(url)
+    }
   }
 }
