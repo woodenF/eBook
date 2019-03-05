@@ -67,3 +67,19 @@ export function getTheme(fileName) {
 export function saveTheme(fileName, theme) {
   return setBookObject(fileName, 'theme', theme)
 }
+
+export function getLocaltion(fileName) {
+  return getBookObject(fileName, 'localtion')
+}
+
+export function saveLocaltion(fileName, localtion) {
+  return setBookObject(fileName, 'localtion', localtion)
+}
+
+export function getReadTime(fileName) {
+  return getBookObject(fileName, 'readTime')
+}
+
+export function saveReadTime(fileName, readTime) {
+  return setBookObject(fileName, 'readTime', readTime)
+}

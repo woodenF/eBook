@@ -22,6 +22,15 @@ const actions = {
   },
   setDefaultTheme: ({ commit }, defaultTheme) => {
     return commit('SET_DEFAULTTHEME', defaultTheme)
+  },
+  setProgress: ({ commit }, progress) => {
+    return commit('SET_PROGRESS', progress)
+  },
+  setBookAvailable: ({ commit }, bookAvailable) => {
+    return commit('SET_BOOKAVAILABLE', bookAvailable)
+  },
+  setSection: ({ commit }, section) => {
+    return commit('SET_SECTION', section)
   }
 }
 
