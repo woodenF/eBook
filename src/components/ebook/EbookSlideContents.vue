@@ -32,7 +32,7 @@
         <span class="slide-contents-item-label"
           :class="{'selected': section === index}"
           :style="contentItemStyle(item)"
-          @click="display(item.href)"
+          @click="displayNavigation(item.href)"
           >
           {{item.label}}
         </span>
@@ -56,6 +56,11 @@ export default {
     }
   },
   methods: {
+    displayNavigation(target) {
+      this.display(target, () => {
+        this.hideTitleAndMenu()
+      })
+    },
     contentItemStyle(item) {
       return {
         marginLeft: `${px2rem(item.level * 15)}rem`

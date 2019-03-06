@@ -70,7 +70,6 @@ export const ebookMixin = {
           if (cb) cb()
         })
       }
-      this.hideTitleAndMenu()
     },
     getReadTimeText() {
       return this.$t('book.haveRead').replace('$1', getReadTimeByMinute(this.fileName))
