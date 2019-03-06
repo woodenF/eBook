@@ -1,5 +1,5 @@
 import { mapGetters, mapActions } from 'vuex'
-import { themeList, addCss, removeAllCss } from './book'
+import { themeList, addCss, removeAllCss, getReadTimeByMinute } from './book'
 import { saveLocaltion } from './localStorage'
 export const ebookMixin = {
   computed: {
@@ -14,7 +14,10 @@ export const ebookMixin = {
       'defaultTheme',
       'progress',
       'bookAvailable',
-      'section'
+      'section',
+      'cover',
+      'metadata',
+      'navigation'
     ]),
     themeList() {
       return themeList(this)
@@ -32,8 +35,16 @@ export const ebookMixin = {
       'setDefaultTheme',
       'setProgress',
       'setBookAvailable',
-      'setSection'
+      'setSection',
+      'setCover',
+      'setMetadata',
+      'setNavigation'
     ]),
+    hideTitleAndMenu() {
+      this.setMenuVisible(false)
+      this.setSettingVisible(-1)
+      this.setFontFamilyVisible(false)
+    },
     initGlobalStyle() {
       removeAllCss()
       const url = `${process.env.VUE_APP_RES_URL}/theme/theme_${this.defaultTheme.toLowerCase()}.css`
@@ -59,6 +70,10 @@ export const ebookMixin = {
           if (cb) cb()
         })
       }
+      this.hideTitleAndMenu()
+    },
+    getReadTimeText() {
+      return this.$t('book.haveRead').replace('$1', getReadTimeByMinute(this.fileName))
     }
   }
 }

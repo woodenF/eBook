@@ -9,6 +9,7 @@ import { ebookMixin } from '../../utils/mixin'
 import Epub from 'epubjs'
 import { Promise } from 'q'
 import { getFontFamily, saveFontFamily, getFontSize, saveFontSize, saveTheme, getTheme, getLocaltion } from '../../utils/localStorage'
+import { flatten } from '../../utils/book'
 global.ePub = Epub
 
 export default {
@@ -36,11 +37,6 @@ export default {
         this.setFontFamilyVisible(false)
       }
       this.setMenuVisible(!this.menuVisible)
-    },
-    hideTitleAndMenu() {
-      this.setMenuVisible(false)
-      this.setSettingVisible(-1)
-      this.setFontFamilyVisible(false)
     },
     initFontSize() {
       let fontSize = getFontSize(this.fileName)
@@ -115,12 +111,33 @@ export default {
         event.stopPropagation()
       })
     },
+    parseBook() {
+      this.book.loaded.cover.then(cover => {
+        this.book.archive.createUrl(cover).then(url => {
+          this.setCover(url)
+        })
+      })
+      this.book.loaded.metadata.then(metadata => {
+        this.setMetadata(metadata)
+      })
+      this.book.loaded.navigation.then(navigation => {
+        const navItem = flatten(navigation.toc)
+        function find(item, level = 0) {
+          return !item.parent ? level : find(navItem.filter(parentItem => parentItem.id === item.parent)[0], ++level)
+        }
+        navItem.forEach(item => {
+          item.level = find(item)
+        })
+        this.setNavigation(navItem)
+      })
+    },
     initEpub() {
       const url = `${process.env.VUE_APP_RES_URL}/epub/${this.fileName}.epub`
       this.book = new Epub(url)
       this.setCurrentBook(this.book)
       this.initRendition()
       this.initGrsture()
+      this.parseBook()
       // ready方法在book解析完毕之后调用
       this.book.ready.then(() => {
         return this.book.locations.generate(750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16))
