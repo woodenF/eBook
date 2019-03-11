@@ -47,9 +47,9 @@
       </div>
     </scroll>
     <scroll class="slide-search-list" :top="66" :bottom="48" v-show="searchVisible">
-      <div class="slide-search-item" 
-      v-for="(item, index) in searchList" :key="index" 
-      v-html="item.excerpt" 
+      <div class="slide-search-item"
+      v-for="(item, index) in searchList" :key="index"
+      v-html="item.excerpt"
       @click="displayContent(item.cfi, true)">
       </div>
     </scroll>
