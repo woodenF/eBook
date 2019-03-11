@@ -13,6 +13,8 @@ const book = {
     section: 0,
     cover: null,
     metadata: null,
+    offsetY: 0,
+    isBookmark: null,
     navigation: null
   },
   mutations: {
@@ -57,6 +59,12 @@ const book = {
     },
     'SET_NAVIGATION': (state, navigation) => {
       state.navigation = navigation
+    },
+    'SET_IS_BOOKMARK': (state, isBookmark) => {
+      state.isBookmark = isBookmark
+    },
+    'SET_OFFSETY': (state, offsetY) => {
+      state.offsetY = offsetY
     }
   }
 }

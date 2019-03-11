@@ -17,7 +17,9 @@ export const ebookMixin = {
       'section',
       'cover',
       'metadata',
-      'navigation'
+      'navigation',
+      'isBookmark',
+      'offsetY'
     ]),
     themeList() {
       return themeList(this)
@@ -38,6 +40,8 @@ export const ebookMixin = {
       'setSection',
       'setCover',
       'setMetadata',
+      'setOffsetY',
+      'setIsBookmark',
       'setNavigation'
     ]),
     hideTitleAndMenu() {

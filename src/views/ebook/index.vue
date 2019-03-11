@@ -1,14 +1,16 @@
 <template>
-  <div class="ebook">
+  <div class="ebook" ref="ebook">
     <ebook-title></ebook-title>
     <ebook-reader></ebook-reader>
     <ebook-menu></ebook-menu>
+    <ebook-bookmark></ebook-bookmark>
   </div>
 </template>
 <script>
 import EbookReader from '../../components/ebook/EbookReader'
 import EbookTitle from '../../components/ebook/EbookTitle'
 import EbookMenu from '../../components/ebook/EbookMenu'
+import EbookBookmark from '../../components/ebook/EbookBookmark'
 import { saveReadTime, getReadTime } from '../../utils/localStorage'
 import { clearInterval } from 'timers'
 import { ebookMixin } from '../../utils/mixin'
@@ -17,9 +19,28 @@ export default {
   components: {
     EbookReader,
     EbookTitle,
-    EbookMenu
+    EbookMenu,
+    EbookBookmark
+  },
+  watch: {
+    offsetY(v) {
+      if (v > 0) {
+        this.move(v)
+      } else if (v === 0) {
+        this.restore()
+      }
+    }
   },
   methods: {
+    restore() {
+      this.$refs.ebook.style.top = 0
+      this.$refs.ebook.style.transition = `all .2s linear`
+    },
+    move(v) {
+      if (this.menuVisible || !this.bookAvailable) return
+      this.$refs.ebook.style.transition = `all 0s linear`
+      this.$refs.ebook.style.top = `${v}px`
+    },
     startLoopReadTime() {
       let readTime = getReadTime(this.fileName)
       if (!readTime) {
@@ -43,5 +64,13 @@ export default {
   }
 }
 </script>
-<style lang="sass" scoped>
+<style lang="scss" scoped>
+@import '../../assets/styles/global';
+.ebook{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 </style>

@@ -40,6 +40,12 @@ const actions = {
   },
   setNavigation: ({ commit }, navigation) => {
     return commit('SET_NAVIGATION', navigation)
+  },
+  setIsBookmark({ commit }, isBookmark) {
+    return commit('SET_IS_BOOKMARK', isBookmark)
+  },
+  setOffsetY({ commit }, offsetY) {
+    return commit('SET_OFFSETY', offsetY)
   }
 }
 
