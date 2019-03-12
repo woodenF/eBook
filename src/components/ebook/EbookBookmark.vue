@@ -15,6 +15,7 @@
 import Bookmark from '../common/Bookmark'
 import { realPx } from '../../utils/utils'
 import { ebookMixin } from '../../utils/mixin'
+import { getBookmark, saveBookmark } from '../../utils/localStorage'
 const BLUE = '#346cbc'
 const WHITE = '#fff'
 export default {
@@ -49,6 +50,14 @@ export default {
       } else if (v === 0) {
         this.restore()
       }
+    },
+    isBookmark(isBookmark) {
+      this.isFixed = isBookmark
+      if (isBookmark) {
+        this.color = BLUE
+      } else {
+        this.color = WHITE
+      }
     }
   },
   data() {
@@ -60,10 +69,33 @@ export default {
   },
   methods: {
     addBookmark() {
-
+      this.bookmark = getBookmark(this.fileName)
+      if (!this.bookmark) {
+        this.bookmark = []
+      }
+      const currentLocation = this.currentBook.rendition.currentLocation()
+      const cfibase = currentLocation.start.cfi.replace(/!.*/, '')
+      const cfistart = currentLocation.start.cfi.replace(/.*!/, '').replace(/\)$/, '')
+      const cfiend = currentLocation.end.cfi.replace(/.*!/, '').replace(/\)$/, '')
+      const cfirange = `${cfibase}!,${cfistart},${cfiend})`
+      this.currentBook.getRange(cfirange).then(range => {
+        const text = range.toString().replace(/\s\s/g, '')
+        this.bookmark.push({
+          cfi: currentLocation.start.cfi,
+          text: text
+        })
+        saveBookmark(this.fileName, this.bookmark)
+        console.log(text)
+      })
     },
     removeBookmark() {
-
+      const currentLocation = this.currentBook.rendition.currentLocation()
+      const cfi = currentLocation.start.cfi
+      this.bookmark = getBookmark(this.fileName)
+      if (this.bookmark) {
+        saveBookmark(this.fileName, this.bookmark.filter(item => item.cfi !== cfi))
+        this.setIsBookmark(false)
+      }
     },
     restore() {
       if (this.isFixed) {
