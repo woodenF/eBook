@@ -27,7 +27,7 @@
 </template>
 <script>
 import { ebookMixin } from '../../utils/mixin'
-import EbookSlideContents from './EbookSlideContents'
+import EbookSlideContents from './EbookSlideContents.vue'
 import EbookSlideBookmark from './EbookSlideBookmark'
 import EbookLoading from './EbookLoading'
 export default {

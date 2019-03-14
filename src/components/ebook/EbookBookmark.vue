@@ -69,15 +69,22 @@ export default {
   },
   methods: {
     addBookmark() {
-      this.bookmark = getBookmark(this.fileName)
-      if (!this.bookmark) {
-        this.bookmark = []
-      }
       const currentLocation = this.currentBook.rendition.currentLocation()
       const cfibase = currentLocation.start.cfi.replace(/!.*/, '')
       const cfistart = currentLocation.start.cfi.replace(/.*!/, '').replace(/\)$/, '')
       const cfiend = currentLocation.end.cfi.replace(/.*!/, '').replace(/\)$/, '')
       const cfirange = `${cfibase}!,${cfistart},${cfiend})`
+      this.bookmark = getBookmark(this.fileName)
+      if (!this.bookmark) {
+        this.bookmark = []
+      } else {
+        if (this.bookmark.some(item => {
+          return item.cfi === currentLocation.start.cfi
+        })) {
+          console.log('已存在')
+          return
+        }
+      }
       this.currentBook.getRange(cfirange).then(range => {
         const text = range.toString().replace(/\s\s/g, '')
         this.bookmark.push({
@@ -119,12 +126,10 @@ export default {
       }
       const iconDown = this.$refs.iconDown
       iconDown.style.transform = `rotate(0deg)`
-      this.isFixed = false
     },
     beforeThreshold(v) {
       this.beforeHeight()
       this.$refs.bookmark.style.top = `${-v}px`
-      this.isFixed = false
     },
     afterThreshold(v) {
       this.$refs.bookmark.style.top = `${-v}px`
