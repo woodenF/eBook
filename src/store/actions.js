@@ -35,6 +35,12 @@ const actions = {
   setCover: ({ commit }, cover) => {
     return commit('SET_COVER', cover)
   },
+  setPaginate: ({ commit }, paginate) => {
+    return commit('SET_PAGINATE', paginate)
+  },
+  setPagelist: ({ commit }, pagelist) => {
+    return commit('SET_PAGELIST', pagelist)
+  },
   setMetadata: ({ commit }, metadata) => {
     return commit('SET_METADATA', metadata)
   },

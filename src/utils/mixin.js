@@ -18,6 +18,8 @@ export const ebookMixin = {
       'cover',
       'metadata',
       'navigation',
+      'pagelist',
+      'paginate',
       'isBookmark',
       'offsetY'
     ]),
@@ -44,7 +46,9 @@ export const ebookMixin = {
       'setCover',
       'setMetadata',
       'setOffsetY',
+      'setPagelist',
       'setIsBookmark',
+      'setPaginate',
       'setNavigation'
     ]),
     hideTitleAndMenu() {
@@ -74,6 +78,17 @@ export const ebookMixin = {
           }
         } else {
           this.setIsBookmark(false)
+        }
+        if (this.pagelist) {
+          const totalPage = this.pagelist.length
+          const currentPage = currentLocation.start.location
+          if (currentPage && currentPage > 0) {
+            this.setPaginate(`${currentPage}/${totalPage}`)
+          } else {
+            this.setPaginate('')
+          }
+        } else {
+            this.setPaginate('')
         }
       }
     },

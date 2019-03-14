@@ -15,6 +15,8 @@ const book = {
     metadata: null,
     offsetY: 0,
     isBookmark: null,
+    pagelist: null,
+    paginate: '',
     navigation: null
   },
   mutations: {
@@ -35,6 +37,9 @@ const book = {
     },
     'SET_DEFAULTFONTFAMILY': (state, defaultFontFamily) => {
       state.defaultFontFamily = defaultFontFamily
+    },
+    'SET_PAGINATE': (state, paginate) => {
+      state.paginate = paginate
     },
     'SET_FONTFAMILYVISIBLE': (state, fontFamilyVisible) => {
       state.fontFamilyVisible = fontFamilyVisible
@@ -62,6 +67,9 @@ const book = {
     },
     'SET_IS_BOOKMARK': (state, isBookmark) => {
       state.isBookmark = isBookmark
+    },
+    'SET_PAGELIST': (state, pagelist) => {
+      state.pagelist = pagelist
     },
     'SET_OFFSETY': (state, offsetY) => {
       state.offsetY = offsetY

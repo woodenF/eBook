@@ -1,5 +1,6 @@
 <template>
   <div class="ebook-footer">
+    <!-- <span class="ebook-footer-text">{{this.paginate}}</span> -->
     <span class="ebook-footer-text">{{this.progress}}%</span>
   </div>
 </template>

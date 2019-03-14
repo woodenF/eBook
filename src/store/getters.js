@@ -13,6 +13,8 @@ const book = {
   cover: state => state.book.cover,
   metadata: state => state.book.metadata,
   navigation: state => state.book.navigation,
+  paginate: state => state.book.paginate,
+  pagelist: state => state.book.pagelist,
   isBookmark: state => state.book.isBookmark,
   offsetY: state => state.book.offsetY
 }
