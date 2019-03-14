@@ -6,7 +6,9 @@
     @click="onMaskClick"
     @touchmove="move"
     @touchend="moveEnd"
-    ></div>
+    @mousedown.left="onMouseEnter"
+    @mousemove="onMouseMove"
+    @mouseup="onMouseEnd"></div>
   </div>
 </template>
 <script>
@@ -20,6 +22,45 @@ global.ePub = Epub
 export default {
   mixins: [ebookMixin],
   methods: {
+    onMouseEnter(e) {
+      this.mouseState = 1
+      this.mouseStartTime = e.timeStamp
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    onMouseMove(e) {
+      if (this.mouseState === 1) {
+        this.mouseState = 2
+      } else if (this.mouseState === 2) {
+        let offsetY = 0
+        if (this.firstOffsetY) {
+          offsetY = e.clientY - this.firstOffsetY
+          this.setOffsetY(offsetY)
+        } else {
+          this.firstOffsetY = e.clientY
+        }
+      }
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    onMouseEnd(e) {
+      console.log('1111')
+      const time = e.timeStamp - this.mouseStartTime
+      if (time < 200) {
+        this.mouseState = 4
+        this.setOffsetY(0)
+        this.firstOffsetY = 0
+      }
+      if (this.mouseState === 2) {
+        this.setOffsetY(0)
+        this.firstOffsetY = 0
+        this.mouseState = 3
+      } else {
+        this.mouseState = 4
+      }
+      e.preventDefault()
+      e.stopPropagation()
+    },
     move(e) {
       let offsetY = 0
       if (this.firstOffsetY) {
@@ -36,6 +77,9 @@ export default {
       this.firstOffsetY = null
     },
     onMaskClick(e) {
+      if (this.mouseState && (this.mouseState === 2 || this.mouseState === 3)) {
+        return
+      }
       const offsetX = e.offsetX
       const width = window.innerWidth
       if (offsetX > 0 && offsetX < width * 0.3) {
@@ -105,6 +149,7 @@ export default {
         height: innerHeight,
         // 微信兼容性配置
         method: 'default'
+        // flow: 'scrolled'
       })
       const location = getLocaltion(this.fileName)
       this.display(location, () => {
