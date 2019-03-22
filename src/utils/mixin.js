@@ -110,3 +110,15 @@ export const ebookMixin = {
     }
   }
 }
+export const storeHomeMixin = {
+  computed: {
+    ...mapGetters([
+      'offsetY'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'setOffsetY'
+    ])
+  }
+}
