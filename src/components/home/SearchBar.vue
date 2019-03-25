@@ -1,36 +1,41 @@
 <template>
-  <div class="search-bar" :class="{'hide-title': !titleVisible, 'hide-shadow': !shadowVisible}">
-    <transition name="title-move">
-      <div class="search-bar-title-wrapper" v-show="titleVisible">
-        <div class="title-text-wrapper">
-          <span class="icon-text icon">{{$t('home.title')}}</span>
+  <div>
+    <div class="search-bar" :class="{'hide-title': !titleVisible, 'hide-shadow': !shadowVisible}">
+      <transition name="title-move">
+        <div class="search-bar-title-wrapper" v-show="titleVisible">
+          <div class="title-text-wrapper">
+            <span class="icon-text icon">{{$t('home.title')}}</span>
+          </div>
+          <div class="title-icon-shake-wrapper">
+            <span class="icon-shake icon"></span>
+          </div>
         </div>
-        <div class="title-icon-shake-wrapper">
-          <span class="icon-shake icon"></span>
+      </transition>
+      <div class="title-icon-back-wrapper" @click="back" :class="{'hide-title': !titleVisible}">
+        <span class="icon-back icon"></span>
+      </div>
+      <div class="search-bar-input-wrapper" :class="{'hide-title': !titleVisible}">
+        <div class="search-bar-blank" :class="{'hide-title': !titleVisible}"></div>
+        <div class="search-bar-input">
+          <span class="icon-search icon"></span>
+          <input class="input" type="text" :placeholder="$t('home.hint')" @click="showHotSearch" v-model="searchText">
         </div>
       </div>
-    </transition>
-    <div class="title-icon-back-wrapper" :class="{'hide-title': !titleVisible}">
-      <span class="icon-back icon"></span>
     </div>
-    <div class="search-bar-input-wrapper" :class="{'hide-title': !titleVisible}">
-      <div class="search-bar-blank" :class="{'hide-title': !titleVisible}"></div>
-      <div class="search-bar-input">
-        <span class="icon-search icon"></span>
-        <input class="input" type="text" :placeholder="$t('home.hint')" v-model="searchText">
-      </div>
-    </div>
+    <hot-search-list v-show="hotSearchVisible" ref="hotSearch"></hot-search-list>
   </div>
 </template>
 <script>
 import { storeHomeMixin } from '../../utils/mixin'
+import HotSearchList from './HotSearchList'
 export default {
   mixins: [storeHomeMixin],
   data () {
     return {
       searchText: '',
       titleVisible: true,
-      shadowVisible: false
+      shadowVisible: false,
+      hotSearchVisible: false
     }
   },
   watch: {
@@ -42,12 +47,47 @@ export default {
         this.showTitle()
         this.hideShadow()
       }
+    },
+    hotSearchOffsetY(offsetY) {
+      if (offsetY > 0) {
+        this.showShadow()
+      } else {
+        this.hideShadow()
+      }
     }
   },
-  components: {},
+  components: {
+    HotSearchList
+  },
   computed: {},
   mounted() {},
   methods: {
+    back() {
+      if (this.offsetY > 0) {
+        this.showShadow()
+      } else {
+        this.hideShadow()
+      }
+      this.hideHotSearch()
+    },
+    hideHotSearch() {
+      this.hotSearchVisible = false
+      if (this.offsetY > 0) {
+        this.hideTitle()
+        this.showShadow()
+      } else {
+        this.showTitle()
+        this.hideShadow()
+      }
+    },
+    showHotSearch() {
+      this.hideTitle()
+      this.hideShadow()
+      this.hotSearchVisible = true
+      this.$nextTick(() => {
+        this.$refs.hotSearch.reset()
+      })
+    },
     hideTitle() {
       this.titleVisible = false
     },
@@ -103,6 +143,7 @@ export default {
     position: absolute;
     left: px2rem(15);
     top: 0;
+    z-index: 200;
     height: px2rem(42);
     transition: height $animationTime $animationType;
     @include center;

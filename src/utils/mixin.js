@@ -113,12 +113,14 @@ export const ebookMixin = {
 export const storeHomeMixin = {
   computed: {
     ...mapGetters([
-      'offsetY'
+      'offsetY',
+      'hotSearchOffsetY'
     ])
   },
   methods: {
     ...mapActions([
-      'setOffsetY'
+      'setOffsetY',
+      'setHotSearchOffsetY'
     ])
   }
 }
