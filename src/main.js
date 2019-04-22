@@ -6,7 +6,7 @@ import i18n from './lang/index'
 // 引入字体图标文件
 import './assets/styles/icon.css'
 import './assets/styles/global.scss'
-import './mock/index'
+// import './mock'
 
 Vue.config.productionTip = false
 

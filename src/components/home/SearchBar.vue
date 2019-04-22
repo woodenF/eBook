@@ -18,7 +18,13 @@
         <div class="search-bar-blank" :class="{'hide-title': !titleVisible}"></div>
         <div class="search-bar-input">
           <span class="icon-search icon"></span>
-          <input class="input" type="text" :placeholder="$t('home.hint')" @click="showHotSearch" v-model="searchText">
+          <input
+          class="input"
+          type="text"
+          :placeholder="$t('home.hint')"
+          @click="showHotSearch"
+          @keyup.13.exact="search"
+          v-model="searchText">
         </div>
       </div>
     </div>
@@ -62,6 +68,14 @@ export default {
   computed: {},
   mounted() {},
   methods: {
+    search() {
+      this.$router.push({
+        path: '/store/list',
+        query: {
+          keyword: this.searchText
+        }
+      })
+    },
     showFlapCard() {
       this.setFlapCardVisible(true)
     },

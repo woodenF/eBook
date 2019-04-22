@@ -224,10 +224,15 @@ export default {
           nav.pagelist = []
         })
         locations.forEach(item => {
-          const loc = item.match(/\[A(.*)\]!/)[1]
+          const loc = item.match(/\[(.*)\]!/)[1]
           this.navigation.forEach(nav => {
             if (nav.href) {
-              const href = nav.href.match(/^html\/(.*)\.(xhtml|html)$/)[1]
+              let href = ''
+              if (nav.href.match(/^(.*)\.html$/)) {
+                href = nav.href.match(/^(.*)\.html$/)[1]
+              } else if (nav.href.match(/^(.*)\.xhtml$/)) {
+                href = nav.href.match(/^(.*)\.xhtml$/)[1]
+              }
               if (href === loc) {
                 nav.pagelist.push(item)
               }
