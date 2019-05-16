@@ -86,6 +86,7 @@
     },
     created() {
       this.getList()
+      console.log('111')
       this.titleText = this.$route.query.categoryText
     }
   }

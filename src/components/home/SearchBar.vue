@@ -85,10 +85,13 @@ export default {
       } else {
         this.hideShadow()
       }
-      this.hideHotSearch()
+      if (this.hotSearchVisible) {
+        this.hideHotSearch()
+      } else {
+        this.$router.push('/store/shelf')
+      }
     },
     hideHotSearch() {
-      this.hotSearchVisible = false
       if (this.offsetY > 0) {
         this.hideTitle()
         this.showShadow()
@@ -96,6 +99,7 @@ export default {
         this.showTitle()
         this.hideShadow()
       }
+      this.hotSearchVisible = false
     },
     showHotSearch() {
       this.hideTitle()
